@@ -1,0 +1,47 @@
+body {
+  background: #f7f7f7;
+  font-family: sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.App {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 2em;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #0001;
+  text-align: center;
+}
+
+input[type="text"] {
+  padding: 0.5em;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-left: 0.5em;
+  font-size: 1em;
+}
+
+button {
+  padding: 0.5em 1.5em;
+  border-radius: 8px;
+  border: none;
+  background: #646cff;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 0.5em;
+  transition: background 0.2s;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #535bf2;
+}
