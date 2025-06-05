@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, CssBaseline, IconButton, ThemeProvider, createTheme } from "@mui/material";
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import { Sidebar } from "./components/Sidebar";
@@ -61,14 +61,44 @@ const DEMO_MESSAGES: Record<string, Message[]> = {
 
 function AppContent() {
   // UI State
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useState<'light' | 'dark'>(() => {
+    const savedMode = localStorage.getItem('theme-mode');
+    return (savedMode as 'light' | 'dark') || 'light';
+  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // Chat State
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const [chats, setChats] = useState<Chat[]>(DEMO_CHATS);
-  const [messages, setMessages] = useState<Record<string, Message[]>>(DEMO_MESSAGES);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(() => {
+    return localStorage.getItem('selectedChatId');
+  });
+  const [chats, setChats] = useState<Chat[]>(() => {
+    const savedChats = localStorage.getItem('chats');
+    return savedChats ? JSON.parse(savedChats) : DEMO_CHATS;
+  });
+  const [messages, setMessages] = useState<Record<string, Message[]>>(() => {
+    const savedMessages = localStorage.getItem('messages');
+    return savedMessages ? JSON.parse(savedMessages) : DEMO_MESSAGES;
+  });
   const [isTyping, setIsTyping] = useState(false);
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem('theme-mode', mode);
+  }, [mode]);
+
+  useEffect(() => {
+    if (selectedChatId) {
+      localStorage.setItem('selectedChatId', selectedChatId);
+    }
+  }, [selectedChatId]);
+
+  useEffect(() => {
+    localStorage.setItem('chats', JSON.stringify(chats));
+  }, [chats]);
+
+  useEffect(() => {
+    localStorage.setItem('messages', JSON.stringify(messages));
+  }, [messages]);
 
   // Theme
   const theme = createTheme({
@@ -262,7 +292,6 @@ function AppContent() {
           messages={currentMessages}
           onSendMessage={handleSendMessage}
           isTyping={isTyping}
-          sidebarOpen={sidebarOpen}
         />
       </Box>
     </ThemeProvider>
@@ -278,3 +307,4 @@ function App() {
 }
 
 export default App;
+

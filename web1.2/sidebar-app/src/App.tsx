@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, CssBaseline, IconButton, ThemeProvider, createTheme } from "@mui/material";
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import { Sidebar } from "./components/Sidebar";
@@ -55,6 +55,17 @@ const DEMO_MESSAGES: Record<string, Message[]> = {
   ]
 };
 
+// Load data from localStorage or use demo data
+const loadInitialChats = (): Chat[] => {
+  const savedChats = localStorage.getItem('chats');
+  return savedChats ? JSON.parse(savedChats) : DEMO_CHATS;
+};
+
+const loadInitialMessages = (): Record<string, Message[]> => {
+  const savedMessages = localStorage.getItem('messages');
+  return savedMessages ? JSON.parse(savedMessages) : DEMO_MESSAGES;
+};
+
 function App() {
   // UI State
   const [mode, setMode] = useState<'light' | 'dark'>('light');
@@ -62,9 +73,18 @@ function App() {
   
   // Chat State
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const [chats, setChats] = useState<Chat[]>(DEMO_CHATS);
-  const [messages, setMessages] = useState<Record<string, Message[]>>(DEMO_MESSAGES);
+  const [chats, setChats] = useState<Chat[]>(loadInitialChats());
+  const [messages, setMessages] = useState<Record<string, Message[]>>(loadInitialMessages());
   const [isTyping, setIsTyping] = useState(false);
+
+  // Save to localStorage whenever chats or messages change
+  useEffect(() => {
+    localStorage.setItem('chats', JSON.stringify(chats));
+  }, [chats]);
+
+  useEffect(() => {
+    localStorage.setItem('messages', JSON.stringify(messages));
+  }, [messages]);
 
   // Theme
   const theme = createTheme({

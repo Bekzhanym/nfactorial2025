@@ -19,7 +19,6 @@ interface ChatAreaProps {
   messages: Message[];
   onSendMessage: (text: string) => void;
   isTyping?: boolean;
-  sidebarOpen: boolean;
 }
 
 const MessageStatus = ({ status }: { status: Message['status'] }) => {
@@ -35,10 +34,10 @@ const MessageStatus = ({ status }: { status: Message['status'] }) => {
   }
 };
 
-export const ChatArea = ({ chat, messages, onSendMessage, isTyping, sidebarOpen }: ChatAreaProps) => {
-  const [messageText, setMessageText] = useState('');
+export const ChatArea = ({ chat, messages, onSendMessage, isTyping }: ChatAreaProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isMultiline, setIsMultiline] = useState(false);
+  const [messageText, setMessageText] = useState(''); // <--- добавьте эту строку
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -254,4 +253,4 @@ export const ChatArea = ({ chat, messages, onSendMessage, isTyping, sidebarOpen 
       </Paper>
     </Box>
   );
-}; 
+};
