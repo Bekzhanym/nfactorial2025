@@ -1,7 +1,16 @@
 import { Box, Typography, Paper } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
-import type { Message } from '../types/chat';
+
+export interface Message {
+  id: string;
+  text?: string;
+  timestamp: string;
+  status: 'sent' | 'delivered' | 'read';
+  type: 'text' | 'image' | 'file';
+  fileUrl?: string;
+  fileName?: string;
+}
 
 interface ChatMessageProps {
   message: Message;
@@ -87,4 +96,4 @@ export const ChatMessage = ({ message, isOutgoing }: ChatMessageProps) => {
       </Paper>
     </Box>
   );
-}; 
+};
